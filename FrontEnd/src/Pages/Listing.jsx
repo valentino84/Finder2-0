@@ -1,0 +1,211 @@
+import React, { useContext, useState, useEffect } from "react";
+import { useParams, useNavigate, NavLink } from "react-router-dom";
+import { ThemeContext, useTheme } from "../context/ThemeContext";
+import { MapPin, Layers, Star, Earth, UserRoundPen } from "lucide-react";
+import Comment from "../components/Comment";
+import axios from "axios";
+import { toast } from "react-toastify";
+
+
+
+const Listing = () => {
+  const { listId } = useParams();
+  const { demoData } = useContext(ThemeContext);
+  const navigate = useNavigate();
+  const [data, setData] = useState(null);
+  const { isDark, getlistingData } = useTheme();
+  const [averageRating, setAverageRating] = useState(0);
+  const [currentUserId, setCurrentUserId] = useState(null);
+  const [user, setUser] = useState(null);
+  const [ownerid, setOwnerId] = useState(null);
+  const [mainImage, setMainImage] = useState("");
+
+
+
+  // Fetch the listing from demoData
+  useEffect(() => {
+    if (demoData && demoData.length > 0) {
+      const foundItem = demoData.find((item) => String(item._id) === listId);
+      setData(foundItem || null);
+    }
+  }, [listId, demoData]);
+
+  // Get current user ID from localStorage
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user"));
+    if (user && user._id) setCurrentUserId(user._id);
+
+    setUser(user.name)
+    // console.log("Current User ID:", user.name);
+  }, []);
+
+  // useEffect(() => {
+  //   console.log("Listing Owner ID:", data.owner._id);
+  //   setOwnerId(data.owner._id || null);
+  // }, [data]);
+
+  // console.log("Current User ID:", currentUserId);
+
+  //  Compute average rating whenever data changes
+  useEffect(() => {
+    if (data && data.reviews && data.reviews.length > 0) {
+      const ratings = data.reviews.map((r) => r.rating || 0);
+      const avg = ratings.reduce((sum, r) => sum + r, 0) / ratings.length;
+      setAverageRating(Math.round(avg * 2) / 2);
+      // console.log("Listing Owner ID:", data.owner._id);
+    } else {
+      setAverageRating(0);
+    }
+  }, [data,]);
+
+
+  const handleDelete = async (deleteId) => {
+    try {
+      const res = await axios.delete(`http://localhost:8000/api/listing/${deleteId}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      });
+      if (res.data.success) {
+        toast.success("Listing deleted successfully!");
+        getlistingData();
+        navigate("/listing");
+
+      } else toast.error(res.data.message);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+
+  const stars = Array(5)
+    .fill(0)
+    .map((_, i) => (
+      <Star
+        key={i}
+        size={20}
+        className={
+          i < Math.floor(averageRating)
+            ? "text-yellow-400 fill-yellow-400"
+            : i + 0.5 === averageRating
+              ? "text-yellow-400 fill-yellow-400/60"
+              : "text-gray-600"
+        }
+      />
+    ));
+
+  if (!data) {
+    return (
+      <div
+        className={`min-h-screen flex items-center justify-center ${isDark ? "bg-gray-900 text-white" : "bg-white text-gray-900"
+          } text-gray-400`}
+      >
+        Loading listing...
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className={`pt-25 min-h-screen justify-center ${isDark ? "bg-gray-900 text-white" : "bg-white text-gray-600"
+        } text-gray-300 px-4 sm:px-8 py-10`}
+    >
+      {/* Back Button */}
+      <button
+        onClick={() => navigate(-1)}
+        className={`flex items-center gap-2 text-sm text-gray-300 ${isDark
+          ? "bg-gray-900 text-white border border-gray-500 hover:bg-blue-400"
+          : "bg-white border border-gray-300 text-gray-900 hover:bg-blue-400"
+          } px-4 py-2 rounded-lg mb-8 transition`}
+      >
+        ← Back to Places
+      </button>
+
+
+      {/* Image + Details */}
+
+      <div className="ml-5 sm:flex w-full max-w-5xl mx-auto">
+        <div className="flex sm:flex-col">
+          {data.image.map((img, i) => (
+            <img
+              key={i}
+              src={img}
+              alt={`thumb-${i}`}
+              className={`p-2 mb-3 mr-10 h-12  sm:h-20 w-20 rounded-lg cursor-pointer border ${mainImage === img
+                ? "border-black dark:border-blue-400"
+                : "border-gray-300 dark:border-gray-700"
+                }`}
+              onClick={() => setMainImage(img)}
+            />
+          ))}
+        </div>
+
+        {data.image && data.image.length > 0 && (
+          <img
+            src={mainImage || data.image[0]}
+            alt={data.title}
+            className="rounded-xl shadow-lg w-90 h-70  sm:h-90 sm:w-150 sm:ml-5 "
+          />
+        )}
+
+
+        {/* Title & Info */}
+        <div className="ml-5 mt-2  sm:px-0">
+
+          <h1 className="text-3xl sm:text-4xl font-bold">{data.title}</h1>
+
+          {/* ⭐ Rating */}
+          <div className="flex items-center gap-1 mt-3">
+            {stars}
+            <span className="ml-2 text-sm">
+              {averageRating.toFixed(1)} ({data.reviews?.length || 0} reviews)
+            </span>
+          </div>
+
+          {/* 📍 Category & Country */}
+          <div className="flex flex-wrap items-center gap-4 mt-4 text-sm">
+            <span className="flex items-center gap-1">
+              <Layers size={16} className="text-blue-400" /> {data.category}
+            </span>
+            <span className="flex items-center gap-1">
+              <Earth size={16} className="text-blue-400" /> {data.country}
+            </span>
+            <span className="flex items-center gap-1">
+              <MapPin size={16} className="text-blue-400" /> {data.location}
+            </span>
+            <span className="flex items-center gap-1">
+              <UserRoundPen size={16} className="text-blue-400" /> {data.owner.name || "Unknown"}
+            </span>
+          </div>
+          {/* 📝 Description */}
+          <p className="mt-6 overflow-auto leading-relaxed max-w-3xl">{data.description}</p>
+
+          {data?.owner && currentUserId === data.owner._id ? (
+            <div>
+              <div className="flex gap-4">
+                <NavLink to={`/listing/${listId}/Edit`} className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                  Edit  Now
+                </NavLink>
+                <button onClick={() => handleDelete(data._id)} className="mt-4 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+                  Delete Now
+                </button>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
+
+
+
+
+        </div>
+      </div>
+
+      {/* Reviews Section */}
+      <div className="mt-12 max-w-5xl mx-auto">
+        {/* <ReviewForm listingId={listId} /> */}
+        <Comment listingId={listId} />
+      </div>
+    </div>
+  );
+};
+
+export default Listing;
