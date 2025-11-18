@@ -18,10 +18,11 @@ export default function Comment({ listingId }) {
     const [review, setReview] = useState("");
     const maxChars = 500;
 
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
 
     const fetchReviews = async () => {
         try {
-            const res = await axios.get(`http://localhost:8000/api/review/${listingId}`);
+            const res = await axios.get(backendurl + `/api/review/${listingId}`);
             if (res.data.success) setReviews(res.data.reviews);
             else setReviews([]);
             setLoading(false);
@@ -40,7 +41,7 @@ export default function Comment({ listingId }) {
 
     const handleDelete = async (reviewId) => {
         try {
-            const res = await axios.delete(`http://localhost:8000/api/review/${reviewId}`, {
+            const res = await axios.delete(backendurl + `/api/review/${reviewId}`, {
                 headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
             });
             if (res.data.success) {
@@ -73,7 +74,7 @@ export default function Comment({ listingId }) {
         try {
             setLoading(true);
             const res = await axios.post(
-                `http://localhost:8000/api/review/${listingId}`,
+                backendurl + `/api/review/${listingId}`,
                 {
                     rating: Number(rating),
                     comment: review.trim(),

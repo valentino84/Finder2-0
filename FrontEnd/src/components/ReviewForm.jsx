@@ -8,6 +8,7 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
     const [loading, setLoading] = useState(false);
     const maxChars = 500;
     const { isDark } = useTheme();
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -22,7 +23,7 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
         try {
             setLoading(true);
             const res = await axios.post(
-                `http://localhost:8000/api/review/${listingId}`,
+                backendurl + `/api/review/${listingId}`,
                 {
                     rating: Number(rating),
                     comment: review.trim(),
@@ -33,7 +34,7 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
                     },
                 }
             );
-            if(res.data.success) {
+            if (res.data.success) {
                 const onReviewAdded = () => {
 
                 }
@@ -61,8 +62,8 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
             <form
                 onSubmit={handleSubmit}
                 className={`w-full max-w-3xl ${isDark
-                        ? "bg-gray-900 border border-gray-600 text-white"
-                        : "bg-white border border-gray-600 text-gray-900"
+                    ? "bg-gray-900 border border-gray-600 text-white"
+                    : "bg-white border border-gray-600 text-gray-900"
                     } rounded-lg p-8 shadow-md`}
             >
                 <h2 className="text-2xl font-semibold mb-6">Share Your Experience</h2>
@@ -108,7 +109,7 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
                     </div>
 
                     <button
-                        type="submit" 
+                        type="submit"
                         disabled={!rating || !review.trim() || loading}
                         className={`inline-flex items-center gap-2 px-4 py-2 rounded-md text-white font-medium shadow-sm transition-opacity disabled:opacity-50 disabled:cursor-not-allowed bg-[#2b5aa6]`}
                     >

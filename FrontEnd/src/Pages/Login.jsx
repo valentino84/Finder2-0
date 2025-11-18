@@ -6,6 +6,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 
 export default function AuthTravelShare({ setToken }) {
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
     const { isDark } = useTheme();
     const [mode, setMode] = useState("login"); // 'signup' or 'login'
     const [form, setForm] = useState({
@@ -28,8 +29,8 @@ export default function AuthTravelShare({ setToken }) {
 
         const url =
             mode === "signup"
-                ? "http://localhost:8000/api/user/register"
-                : "http://localhost:8000/api/user/login";
+                ? backendurl + "/api/user/register"
+                : backendurl + "/api/user/login";
 
         try {
             const response = await axios.post(url, form); // Axios auto stringifies JSON

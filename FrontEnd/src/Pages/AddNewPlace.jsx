@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 
 export default function AddListingForm({ token }) {
     const { isDark, getlistingData } = useTheme();
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
     const navigate = useNavigate();
     const [form, setForm] = useState({
         title: "",
@@ -61,7 +62,7 @@ export default function AddListingForm({ token }) {
                 return;
             }
             const res = await axios.post(
-                "http://localhost:8000/api/listing/add",
+                backendurl + "/api/listing/add",
                 formData,
                 {
                     headers: {

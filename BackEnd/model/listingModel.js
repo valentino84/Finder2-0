@@ -33,16 +33,12 @@ const listingSchema = new mongoose.Schema({
     },
     reviews: [{
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Review", 
+        ref: "Review",
     }],
     owner: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",   // ✅ Capital U
     },
-
-
-
-
 });
 
 listingSchema.post("findOneAndDelete", async (listing) => {

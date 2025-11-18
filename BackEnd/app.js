@@ -14,7 +14,7 @@ import listingRoute from './router/listingRoute.js';
 import reviewRoutes from "./router/reviewRoutes.js";
 //add config 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8090;
 connectDB();
 connectcloudinary();
 

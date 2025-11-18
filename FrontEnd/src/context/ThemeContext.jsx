@@ -7,9 +7,11 @@ import { toast } from 'react-toastify';
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
+
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
     const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark");
     const [demoData, setDemoData] = useState([]);
-    
+
     const toggleTheme = () => setIsDark((prev) => !prev);
 
     // Apply dark/light class to <html> for Tailwind
@@ -30,7 +32,7 @@ export const ThemeProvider = ({ children }) => {
 
     const getlistingData = async () => {
         try {
-            const response = await axios.get('http://localhost:8000/api/listing/list');
+            const response = await axios.get(backendurl + '/api/listing/list');
             // console.log(response.data.listings.reviews);
             if (response.data.success) {
                 setDemoData(response.data.listings);

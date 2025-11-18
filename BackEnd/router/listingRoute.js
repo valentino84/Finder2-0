@@ -10,6 +10,6 @@ listingRouter.post('/add', userAuth, upload.fields([{ name: 'image1', maxCount: 
 listingRouter.put("/:editId/edit", userAuth, upload.fields([{ name: "image1", maxCount: 1 }, { name: "image2", maxCount: 1 }, { name: "image3", maxCount: 1 }, { name: "image4", maxCount: 1 },]), editListing);
 listingRouter.delete('/:deleteId', userAuth, deleteListing);
 listingRouter.get('/list', list);
-listingRouter.get('/:id', singleListing);
+listingRouter.get('/:id', userAuth, singleListing);
 
 export default listingRouter;

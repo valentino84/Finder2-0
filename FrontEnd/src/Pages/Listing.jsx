@@ -16,10 +16,10 @@ const Listing = () => {
   const { isDark, getlistingData } = useTheme();
   const [averageRating, setAverageRating] = useState(0);
   const [currentUserId, setCurrentUserId] = useState(null);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [ownerid, setOwnerId] = useState(null);
   const [mainImage, setMainImage] = useState("");
-
+  const backendurl = import.meta.env.VITE_BACKEND_URL;
 
 
   // Fetch the listing from demoData
@@ -35,7 +35,7 @@ const Listing = () => {
     const user = JSON.parse(localStorage.getItem("user"));
     if (user && user._id) setCurrentUserId(user._id);
 
-    setUser(user.name)
+    // setUser(user.name)
     // console.log("Current User ID:", user.name);
   }, []);
 
@@ -61,7 +61,7 @@ const Listing = () => {
 
   const handleDelete = async (deleteId) => {
     try {
-      const res = await axios.delete(`http://localhost:8000/api/listing/${deleteId}`, {
+      const res = await axios.delete(backendurl + `/api/listing/${deleteId}`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
       });
       if (res.data.success) {

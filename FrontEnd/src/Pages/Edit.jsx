@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 export default function EditListingForm({ token }) {
+    const backendurl = import.meta.env.VITE_BACKEND_URL;
     const { isDark } = useTheme();
     const { getlistingData } = useContext(ThemeContext); // refresh listings after edit
     const { listId } = useParams();
@@ -31,7 +32,7 @@ export default function EditListingForm({ token }) {
     useEffect(() => {
         const fetchListing = async () => {
             try {
-                const res = await axios.get(`http://localhost:8000/api/listing/${listId}`);
+                const res = await axios.get( backendurl+ `/api/listing/${listId}`);
                 const data = res.data;
                 setForm({
                     title: data.title,
@@ -86,7 +87,7 @@ export default function EditListingForm({ token }) {
             if (image4) formData.append("image4", image4);
 
             const res = await axios.put(
-                `http://localhost:8000/api/listing/${listId}/edit`,
+                backendurl + `/api/listing/${listId}/edit`,
                 formData,
                 {
                     headers: {
