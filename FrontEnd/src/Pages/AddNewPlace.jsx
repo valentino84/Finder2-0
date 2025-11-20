@@ -9,7 +9,7 @@ import { toast } from 'react-toastify';
 
 export default function AddListingForm({ token }) {
     const { isDark, getlistingData } = useTheme();
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
     const navigate = useNavigate();
     const [form, setForm] = useState({
         title: "",
