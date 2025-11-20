@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 import axios from "axios";
 
 export default function EditListingForm({ token }) {
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
     const { isDark } = useTheme();
     const { getlistingData } = useContext(ThemeContext); // refresh listings after edit
     const { listId } = useParams();
