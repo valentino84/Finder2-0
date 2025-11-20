@@ -19,7 +19,7 @@ const Listing = () => {
   // const [user, setUser] = useState(null);
   const [ownerid, setOwnerId] = useState(null);
   const [mainImage, setMainImage] = useState("");
-  const backendurl = import.meta.env.VITE_BACKEND_URL;
+  const backendurl = "https://finder2-0-backend.onrender.com";
 
 
   // Fetch the listing from demoData
