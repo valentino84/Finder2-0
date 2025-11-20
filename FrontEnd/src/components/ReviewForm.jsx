@@ -8,7 +8,7 @@ export default function ReviewForm({ listingId, onReviewAdded }) {
     const [loading, setLoading] = useState(false);
     const maxChars = 500;
     const { isDark } = useTheme();
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
