@@ -6,7 +6,7 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 
 export default function AuthTravelShare({ setToken }) {
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
     const { isDark } = useTheme();
     const [mode, setMode] = useState("login"); // 'signup' or 'login'
     const [form, setForm] = useState({
