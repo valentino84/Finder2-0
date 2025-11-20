@@ -18,7 +18,7 @@ export default function Comment({ listingId }) {
     const [review, setReview] = useState("");
     const maxChars = 500;
 
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
 
     const fetchReviews = async () => {
         try {
