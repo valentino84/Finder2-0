@@ -8,7 +8,7 @@ export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
 
-    const backendurl = import.meta.env.VITE_BACKEND_URL;
+    const backendurl = "https://finder2-0-backend.onrender.com";
     const [isDark, setIsDark] = useState(() => localStorage.getItem("theme") === "dark");
     const [demoData, setDemoData] = useState([]);
 
